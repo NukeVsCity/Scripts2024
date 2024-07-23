@@ -5,6 +5,15 @@ local tweeninfo = TweenInfo.new
 local input = game:GetService("UserInputService")
 local run = game:GetService("RunService")
 
+--retard function, guess which retard made it
+local input = game:GetService("UserInputService")
+
+if input.TouchEnabled then
+    getgenv().inputMethod = "TouchTap"
+else
+    getgenv().inputMethod = "MouseButton1Click"
+end
+
 local Utility = {}
 local Objects = {}
 function Kavo:DraggingEnabled(frame, parent)
@@ -16,7 +25,7 @@ function Kavo:DraggingEnabled(frame, parent)
     local dragInput, mousePos, framePos
 
     frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then 
             dragging = true
             mousePos = input.Position
             framePos = parent.Position
@@ -30,7 +39,7 @@ function Kavo:DraggingEnabled(frame, parent)
     end)
 
     frame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
@@ -278,7 +287,7 @@ function Kavo.CreateLib(kavName, themeList)
     close.Image = "rbxassetid://3926305904"
     close.ImageRectOffset = Vector2.new(284, 4)
     close.ImageRectSize = Vector2.new(24, 24)
-    close.MouseButton1Click:Connect(function()
+    close[getgenv().inputMethod]:Connect(function()
         game.TweenService:Create(close, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
             ImageTransparency = 1
         }):Play()
@@ -431,7 +440,7 @@ function Kavo.CreateLib(kavName, themeList)
         page.ChildAdded:Connect(UpdateSize)
         page.ChildRemoved:Connect(UpdateSize)
 
-        tabButton.MouseButton1Click:Connect(function()
+        tabButton[getgenv().inputMethod]:Connect(function()
             UpdateSize()
             for i,v in next, Pages:GetChildren() do
                 v.Visible = false
@@ -690,7 +699,7 @@ function Kavo.CreateLib(kavName, themeList)
                 local btn = buttonElement
                 local sample = Sample
 
-                btn.MouseButton1Click:Connect(function()
+                btn[getgenv().inputMethod]:Connect(function()
                     if not focusing then
                         callback()
                         local c = sample:Clone()
@@ -734,7 +743,7 @@ function Kavo.CreateLib(kavName, themeList)
                         hovering = false
                     end
                 end)
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -888,7 +897,7 @@ function Kavo.CreateLib(kavName, themeList)
                 local btn = textboxElement
                 local infBtn = viewInfo
 
-                btn.MouseButton1Click:Connect(function()
+                btn[getgenv().inputMethod]:Connect(function()
                     if focusing then
                         for i,v in next, infoContainer:GetChildren() do
                             Utility:TweenObject(v, {Position = UDim2.new(0,0,2,0)}, 0.2)
@@ -933,7 +942,7 @@ function Kavo.CreateLib(kavName, themeList)
                     end
                 end)
 
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -1092,7 +1101,7 @@ function Kavo.CreateLib(kavName, themeList)
                                     updateSectionFrame()
                 UpdateSize()
 
-                    btn.MouseButton1Click:Connect(function()
+                    btn[getgenv().inputMethod]:Connect(function()
                         if not focusing then
                             if toggled == false then
                                 game.TweenService:Create(img, TweenInfo.new(0.11, Enum.EasingStyle.Linear,Enum.EasingDirection.In), {
@@ -1177,7 +1186,7 @@ function Kavo.CreateLib(kavName, themeList)
                             moreInfo.TextColor3 = themeList.TextColor
                         end
                     end)()
-                    viewInfo.MouseButton1Click:Connect(function()
+                    viewInfo[getgenv().inputMethod]:Connect(function()
                         if not viewDe then
                             viewDe = true
                             focusing = true
@@ -1400,7 +1409,7 @@ function Kavo.CreateLib(kavName, themeList)
                 end)()
 
                 local Value
-                sliderBtn.MouseButton1Down:Connect(function()
+                sliderBtn[getgenv().inputMethod]:Connect(function()
                     if not focusing then
                         game.TweenService:Create(val, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
                             TextTransparency = 0
@@ -1419,7 +1428,7 @@ function Kavo.CreateLib(kavName, themeList)
                             sliderDrag:TweenSize(UDim2.new(0, math.clamp(mouse.X - sliderDrag.AbsolutePosition.X, 0, 149), 0, 6), "InOut", "Linear", 0.05, true)
                         end)
                         releaseconnection = uis.InputEnded:Connect(function(Mouse)
-                            if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if Mouse.UserInputType == Enum.UserInputType[getgenv().inputMethod] then
                                 Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 149) * sliderDrag.AbsoluteSize.X) + tonumber(minvalue))
                                 pcall(function()
                                     callback(Value)
@@ -1441,7 +1450,7 @@ function Kavo.CreateLib(kavName, themeList)
                         Utility:TweenObject(blurFrame, {BackgroundTransparency = 1}, 0.2)
                     end
                 end)
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -1511,7 +1520,7 @@ function Kavo.CreateLib(kavName, themeList)
                 dropOpen.TextColor3 = Color3.fromRGB(0, 0, 0)
                 dropOpen.TextSize = 14.000
                 dropOpen.ClipsDescendants = true
-                dropOpen.MouseButton1Click:Connect(function()
+                dropOpen[getgenv().inputMethod]:Connect(function()
                     if not focusing then
                         if opened then
                             opened = false
@@ -1685,7 +1694,7 @@ function Kavo.CreateLib(kavName, themeList)
                     Utility:TweenObject(moreInfo, {TextColor3 = Color3.fromRGB(255,255,255)}, 0.2)
                 end 
 
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -1734,7 +1743,7 @@ function Kavo.CreateLib(kavName, themeList)
                     optionSelect.TextSize = 14.000
                     optionSelect.TextXAlignment = Enum.TextXAlignment.Left
                     optionSelect.ClipsDescendants = true
-                    optionSelect.MouseButton1Click:Connect(function()
+                    optionSelect[getgenv().inputMethod]:Connect(function()
                         if not focusing then
                             opened = false
                             callback(v)
@@ -1835,7 +1844,7 @@ function Kavo.CreateLib(kavName, themeList)
                         optionSelect.ClipsDescendants = true
                         UICorner_2.CornerRadius = UDim.new(0, 4)
                         UICorner_2.Parent = optionSelect
-                        optionSelect.MouseButton1Click:Connect(function()
+                        optionSelect[getgenv().inputMethod]:Connect(function()
                             if not focusing then
                                 opened = false
                                 callback(v)
@@ -1943,7 +1952,7 @@ function Kavo.CreateLib(kavName, themeList)
                 keybindElement.Text = ""
                 keybindElement.TextColor3 = Color3.fromRGB(0, 0, 0)
                 keybindElement.TextSize = 14.000
-                keybindElement.MouseButton1Click:connect(function(e) 
+                keybindElement[getgenv().inputMethod]:connect(function(e) 
                     if not focusing then
                         togName_2.Text = ". . ."
                         local a, b = game:GetService('UserInputService').InputBegan:wait();
@@ -2029,7 +2038,7 @@ function Kavo.CreateLib(kavName, themeList)
                 viewInfo.ImageColor3 = themeList.SchemeColor
                 viewInfo.ImageRectOffset = Vector2.new(764, 764)
                 viewInfo.ImageRectSize = Vector2.new(36, 36)
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -2179,7 +2188,7 @@ function Kavo.CreateLib(kavName, themeList)
                 colorElement.Text = ""
                 colorElement.TextColor3 = Color3.fromRGB(0, 0, 0)
                 colorElement.TextSize = 14.000
-                colorElement.MouseButton1Click:Connect(function()
+                colorElement[getgenv().inputMethod]:Connect(function()
                     if not focusing then
                         if colorOpened then
                             colorOpened = false
@@ -2301,7 +2310,7 @@ function Kavo.CreateLib(kavName, themeList)
                 viewInfo.ImageColor3 = themeList.SchemeColor
                 viewInfo.ImageRectOffset = Vector2.new(764, 764)
                 viewInfo.ImageRectSize = Vector2.new(36, 36)
-                viewInfo.MouseButton1Click:Connect(function()
+                viewInfo[getgenv().inputMethod]:Connect(function()
                     if not viewDe then
                         viewDe = true
                         focusing = true
@@ -2578,7 +2587,7 @@ function Kavo.CreateLib(kavName, themeList)
                     end
                 end
 
-                onrainbow.MouseButton1Click:Connect(togglerainbow)
+                onrainbow[getgenv().inputMethod]:Connect(togglerainbow)
                 --
                 mouse.Move:connect(cp)
                 rgb.MouseButton1Down:connect(function()colorpicker=true end)
@@ -2598,7 +2607,7 @@ function Kavo.CreateLib(kavName, themeList)
             	local UICorner = Instance.new("UICorner")
             	label.Name = "label"
             	label.Parent = sectionInners
-            	label.BackgroundColor3 = themeList.SchemeColor
+            	label.BackgroundColor3 = Color3.fromRGB(110,2,2)
             	label.BorderSizePixel = 0
 				label.ClipsDescendants = true
             	label.Text = title
