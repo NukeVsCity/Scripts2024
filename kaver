@@ -2607,7 +2607,7 @@ function Kavo.CreateLib(kavName, themeList)
             	local UICorner = Instance.new("UICorner")
             	label.Name = "label"
             	label.Parent = sectionInners
-            	label.BackgroundColor3 = Color3.fromRGB(110,2,2)
+            	label.BackgroundColor3 = Color3(110,2,2)
             	label.BorderSizePixel = 0
 				label.ClipsDescendants = true
             	label.Text = title
