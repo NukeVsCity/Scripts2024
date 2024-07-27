@@ -1,4 +1,6 @@
-local Kavo = {}
+    Kavo:DraggingEnabled(MainHeader, Main)
+    Kavo:DraggingEnabled(MainCorner, Main)
+    Kavo:DraggingEnabled(headerCover, Main)local Kavo = {}
 
 local tween = game:GetService("TweenService")
 local tweeninfo = TweenInfo.new
@@ -220,6 +222,8 @@ function Kavo.CreateLib(kavName, themeList)
     local blurFrame = Instance.new("Frame")
 
     Kavo:DraggingEnabled(MainHeader, Main)
+    Kavo:DraggingEnabled(MainSide, Main)
+  
 
 
     blurFrame.Name = "blurFrame"
