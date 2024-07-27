@@ -1369,15 +1369,16 @@ function Kavo.CreateLib(kavName, themeList)
                 end 
 
 
-                                updateSectionFrame()
-                UpdateSize()
-                local mouse = game:GetService("Players").LocalPlayer:GetMouse();
+-- Update UI elements' properties
+updateSectionFrame()
+UpdateSize()
 
-                local ms = game.Players.LocalPlayer:GetMouse()
-                local uis = game:GetService("UserInputService")
-                local btn = sliderElement
-                local infBtn = viewInfo
-                local hovering = false
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+local uis = game:GetService("UserInputService")
+local btn = sliderElement
+local infBtn = viewInfo
+local hovering = false
+
 btn.MouseEnter:Connect(function()
     if not focusing then
         game.TweenService:Create(btn, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
@@ -1407,7 +1408,7 @@ coroutine.wrap(function()
         write.ImageColor3 = themeList.SchemeColor
         togName.TextColor3 = themeList.TextColor
         viewInfo.ImageColor3 = themeList.SchemeColor
-        sliderBtn.BackgroundColor3 = Color3.fromRGB(themeList.ElementColor.r * 255 + 5, themeList.ElementColor.g * 255 + 5, themeList.ElementColor.b * 255  + 5)
+        sliderBtn.BackgroundColor3 = Color3.fromRGB(themeList.ElementColor.r * 255 + 5, themeList.ElementColor.g * 255 + 5, themeList.ElementColor.b * 255 + 5)
         sliderDrag.BackgroundColor3 = themeList.SchemeColor
     end
 end)()
@@ -1420,7 +1421,7 @@ local function updateValue()
     pcall(function()
         callback(Value)
     end)
-    val.Text = Value
+    val.Text = tostring(Value)
     sliderDrag:TweenSize(UDim2.new(0, math.clamp(mouse.X - sliderDrag.AbsolutePosition.X, 0, 149), 0, 6), "InOut", "Linear", 0.05, true)
 end
 
@@ -1455,14 +1456,7 @@ sliderBtn.MouseButton1Down:Connect(function()
         Utility:TweenObject(blurFrame, {BackgroundTransparency = 1}, 0.2)
     end
 end)
-                    else
-                        for i,v in next, infoContainer:GetChildren() do
-                            Utility:TweenObject(v, {Position = UDim2.new(0,0,2,0)}, 0.2)
-                            focusing = false
-                        end
-                        Utility:TweenObject(blurFrame, {BackgroundTransparency = 1}, 0.2)
-                    end
-                end)
+
                 viewInfo.MouseButton1Click:Connect(function()
                     if not viewDe then
                         viewDe = true
