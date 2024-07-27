@@ -1,6 +1,4 @@
-    Kavo:DraggingEnabled(MainHeader, Main)
-    Kavo:DraggingEnabled(MainCorner, Main)
-    Kavo:DraggingEnabled(headerCover, Main)local Kavo = {}
+local Kavo = {}
 
 local tween = game:GetService("TweenService")
 local tweeninfo = TweenInfo.new
