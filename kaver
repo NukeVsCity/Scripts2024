@@ -8,16 +8,15 @@ local run = game:GetService("RunService")
 local Utility = {}
 local Objects = {}
 
-
+-- Detect if the device is touch-enabled or not
+local inputMethod
 if input.TouchEnabled then
-    getgenv().inputMethod = "TouchTap"
+    inputMethod = Enum.UserInputType.Touch
 else
-    getgenv().inputMethod = "MouseButton1Click"
+    inputMethod = Enum.UserInputType.MouseButton1
 end
 
-
 function Kavo:DraggingEnabled(frame, parent)
-        
     parent = parent or frame
     
     -- stolen from wally or kiriot, kek
@@ -25,7 +24,7 @@ function Kavo:DraggingEnabled(frame, parent)
     local dragInput, mousePos, framePos
 
     frame.InputBegan:Connect(function(input)
-        if input.UserInputType == getgenv().inputMethod then
+        if input.UserInputType == inputMethod then
             dragging = true
             mousePos = input.Position
             framePos = parent.Position
@@ -39,7 +38,7 @@ function Kavo:DraggingEnabled(frame, parent)
     end)
 
     frame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement or Enum.UserInputType.Touch then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
@@ -47,7 +46,7 @@ function Kavo:DraggingEnabled(frame, parent)
     input.InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             local delta = input.Position - mousePos
-            parent.Position  = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+            parent.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
         end
     end)
 end
