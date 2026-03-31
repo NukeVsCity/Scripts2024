@@ -388,13 +388,10 @@ function Kavo.CreateLib(kavName, themeList)
         local page = Instance.new("ScrollingFrame")
         local pageListing = Instance.new("UIListLayout")
 
-        local function UpdateSize()
-            local cS = pageListing.AbsoluteContentSize
-
-            game.TweenService:Create(page, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                CanvasSize = UDim2.new(0,cS.X,0,cS.Y)
-            }):Play()
-        end
+local function UpdateSize()
+    local cS = pageListing.AbsoluteContentSize
+    page.CanvasSize = UDim2.new(0, 0, 0, cS.Y + 10)
+end
 
 
 
@@ -413,9 +410,7 @@ function Kavo.CreateLib(kavName, themeList)
         pageListing.Name = "pageListing"
         pageListing.Parent = page
 
-pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    UpdateSize()
-end)
+
 
         pageListing.SortOrder = Enum.SortOrder.LayoutOrder
         pageListing.Padding = UDim.new(0, 5)
@@ -447,9 +442,7 @@ end)
         UICorner.Parent = tabButton
         table.insert(Tabs, tabName)
 
-        UpdateSize()
-        page.ChildAdded:Connect(UpdateSize)
-        page.ChildRemoved:Connect(UpdateSize)
+UpdateSize()
 
         tabButton.MouseButton1Click:Connect(function()
             UpdateSize()
@@ -550,34 +543,32 @@ end)
                 Utility:TweenObject(sectionName, {TextColor3 = Color3.fromRGB(255,255,255)}, 0.2)
             end 
                
-            sectionInners.Name = "sectionInners"
-            sectionInners.Parent = sectionFrame
-            sectionInners.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            sectionInners.BackgroundTransparency = 1.000
-            sectionInners.Position = UDim2.new(0, 0, 0.190751448, 0)
 
-            sectionElListing.Name = "sectionElListing"
-            sectionElListing.Parent = sectionInners
-            sectionElListing.SortOrder = Enum.SortOrder.LayoutOrder
-            sectionElListing.Padding = UDim.new(0, 3)
+sectionInners.Name = "sectionInners"
+sectionInners.Parent = sectionFrame
+sectionInners.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sectionInners.BackgroundTransparency = 1.000
+sectionInners.Position = UDim2.new(0, 0, 0, hidden and 0 or 38)
+sectionInners.Size = UDim2.new(1, 0, 0, 0)
+
+sectionElListing.Name = "sectionElListing"
+sectionElListing.Parent = sectionInners
+sectionElListing.SortOrder = Enum.SortOrder.LayoutOrder
+sectionElListing.Padding = UDim.new(0, 3)
 
 local function updateSectionFrame()
     local innerSc = sectionElListing.AbsoluteContentSize
     sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
 
-    local frameSc = sectionlistoknvm.AbsoluteContentSize
-    sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
+    local headerHeight = hidden and 0 or 33
+    local gap = hidden and 0 or 5
+    sectionFrame.Size = UDim2.new(0, 352, 0, headerHeight + gap + innerSc.Y)
+
+    task.defer(UpdateSize)
 end
 
-sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
-
-sectionlistoknvm:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
+sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateSectionFrame)
+updateSectionFrame()
 
         coroutine.wrap(function()
             while wait() do
@@ -590,7 +581,7 @@ end)
         end)()
 
 
-                updateSectionFrame()
+                
                 UpdateSize()
             local Elements = {}
             function Elements:NewButton(bname,tipINf, callback)
