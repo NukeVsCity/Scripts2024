@@ -396,23 +396,7 @@ function Kavo.CreateLib(kavName, themeList)
             }):Play()
         end
 
-local function updateSectionFrame()
-    local innerSc = sectionElListing.AbsoluteContentSize
-    sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
 
-    local frameSc = sectionlistoknvm.AbsoluteContentSize
-    sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
-end
-
-sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
-
-sectionlistoknvm:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
 
 
         page.Name = "Page"
@@ -577,7 +561,15 @@ end)
             sectionElListing.SortOrder = Enum.SortOrder.LayoutOrder
             sectionElListing.Padding = UDim.new(0, 3)
 
-            sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+local function updateSectionFrame()
+    local innerSc = sectionElListing.AbsoluteContentSize
+    sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
+
+    local frameSc = sectionlistoknvm.AbsoluteContentSize
+    sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
+end
+
+sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
     updateSectionFrame()
     UpdateSize()
 end)
