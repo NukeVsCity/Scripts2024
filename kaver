@@ -410,9 +410,7 @@ function Kavo.CreateLib(kavName, themeList)
         pageListing.Name = "pageListing"
         pageListing.Parent = page
 
-pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    UpdateSize()
-end)
+
 
         pageListing.SortOrder = Enum.SortOrder.LayoutOrder
         pageListing.Padding = UDim.new(0, 5)
@@ -444,9 +442,11 @@ end)
         UICorner.Parent = tabButton
         table.insert(Tabs, tabName)
 
-        UpdateSize()
-        page.ChildAdded:Connect(UpdateSize)
-        page.ChildRemoved:Connect(UpdateSize)
+UpdateSize()
+
+pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    UpdateSize()
+end)
 
         tabButton.MouseButton1Click:Connect(function()
             UpdateSize()
