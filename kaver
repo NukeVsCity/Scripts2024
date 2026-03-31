@@ -409,6 +409,11 @@ function Kavo.CreateLib(kavName, themeList)
 
         pageListing.Name = "pageListing"
         pageListing.Parent = page
+
+pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    UpdateSize()
+end)
+
         pageListing.SortOrder = Enum.SortOrder.LayoutOrder
         pageListing.Padding = UDim.new(0, 5)
 
@@ -565,7 +570,16 @@ function Kavo.CreateLib(kavName, themeList)
             sectionElListing.SortOrder = Enum.SortOrder.LayoutOrder
             sectionElListing.Padding = UDim.new(0, 3)
 
-            
+            sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    updateSectionFrame()
+    UpdateSize()
+end)
+
+sectionlistoknvm:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    updateSectionFrame()
+    UpdateSize()
+end)
+
         coroutine.wrap(function()
             while wait() do
                 sectionFrame.BackgroundColor3 = themeList.Background
