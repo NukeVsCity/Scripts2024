@@ -147,28 +147,6 @@ end)
 
 local LibName = 11111
 
-
-local function updateSectionFrame()
-    local innerSc = sectionElListing.AbsoluteContentSize
-    sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
-
-    local frameSc = sectionlistoknvm.AbsoluteContentSize
-    sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
-end
-
-sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
-
-sectionlistoknvm:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    updateSectionFrame()
-    UpdateSize()
-end)
-
-updateSectionFrame()
-UpdateSize()
-
 function Kavo:ToggleUI()
     if game.CoreGui[LibName].Enabled then
         game.CoreGui[LibName].Enabled = false
@@ -432,7 +410,9 @@ function Kavo.CreateLib(kavName, themeList)
         pageListing.Name = "pageListing"
         pageListing.Parent = page
 
-
+pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    UpdateSize()
+end)
 
         pageListing.SortOrder = Enum.SortOrder.LayoutOrder
         pageListing.Padding = UDim.new(0, 5)
@@ -464,11 +444,9 @@ function Kavo.CreateLib(kavName, themeList)
         UICorner.Parent = tabButton
         table.insert(Tabs, tabName)
 
-UpdateSize()
-
-pageListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    UpdateSize()
-end)
+        UpdateSize()
+        page.ChildAdded:Connect(UpdateSize)
+        page.ChildRemoved:Connect(UpdateSize)
 
         tabButton.MouseButton1Click:Connect(function()
             UpdateSize()
@@ -612,7 +590,12 @@ end)
             end
         end)()
 
-  
+            local function updateSectionFrame()
+                local innerSc = sectionElListing.AbsoluteContentSize
+                sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
+                local frameSc = sectionlistoknvm.AbsoluteContentSize
+                sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
+            end
                 updateSectionFrame()
                 UpdateSize()
             local Elements = {}
