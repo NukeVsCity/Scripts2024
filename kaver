@@ -147,6 +147,28 @@ end)
 
 local LibName = 11111
 
+
+local function updateSectionFrame()
+    local innerSc = sectionElListing.AbsoluteContentSize
+    sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
+
+    local frameSc = sectionlistoknvm.AbsoluteContentSize
+    sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
+end
+
+sectionElListing:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    updateSectionFrame()
+    UpdateSize()
+end)
+
+sectionlistoknvm:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    updateSectionFrame()
+    UpdateSize()
+end)
+
+updateSectionFrame()
+UpdateSize()
+
 function Kavo:ToggleUI()
     if game.CoreGui[LibName].Enabled then
         game.CoreGui[LibName].Enabled = false
@@ -590,12 +612,7 @@ end)
             end
         end)()
 
-            local function updateSectionFrame()
-                local innerSc = sectionElListing.AbsoluteContentSize
-                sectionInners.Size = UDim2.new(1, 0, 0, innerSc.Y)
-                local frameSc = sectionlistoknvm.AbsoluteContentSize
-                sectionFrame.Size = UDim2.new(0, 352, 0, frameSc.Y)
-            end
+  
                 updateSectionFrame()
                 UpdateSize()
             local Elements = {}
